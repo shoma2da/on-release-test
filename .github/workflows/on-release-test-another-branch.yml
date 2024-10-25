@@ -1,4 +1,4 @@
-name: "on release test"
+name: "on release test another branch"
 
 on:
   push:
