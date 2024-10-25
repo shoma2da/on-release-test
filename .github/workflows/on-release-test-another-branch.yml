@@ -1,0 +1,27 @@
+name: "on release test"
+
+on:
+  push:
+  release:
+    types: [published]
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - shell: bash
+        run: echo ${{ github.event.release.prerelease }}, ${{ github.event.release.tag_name }}
+
+  delete-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Delete release and tag
+        run: |
+          gh release delete ${{ github.event.release.tag_name }} -y
+          git push origin --delete ${{ github.event.release.tag_name }}
+        env:
+          GH_TOKEN: ${{ github.token }}
